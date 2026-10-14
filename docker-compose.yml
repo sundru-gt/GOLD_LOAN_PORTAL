@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  # MongoDB database
+  mongo:
+    image: mongo:7
+    container_name: gold_loan_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: gold_loan_portal
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gold_loan_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/gold_loan_portal
+      - PORT=4000
+      - NODE_ENV=production
+    ports:
+      - "4000:4000"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # Frontend (served via vite preview or nginx in production)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gold_loan_frontend
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+    driver: local
