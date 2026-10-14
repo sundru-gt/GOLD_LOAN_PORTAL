@@ -4,9 +4,7 @@
 
 | Tool | Purpose |
 |------|---------|
-| **Antigravity (Google DeepMind)** | Primary coding agent – generated all backend and frontend code, tests, and documentation |
-| **Google Gemini 1.5 Flash** | Powers the in-app AI Loan Assistant with function calling |
-
+| **Google Gemini 3.5 Flash** | Powers AI-driven chatbot interactions and the intelligent Loan Assistant, enabling natural-language conversations, contextual responses, and function calling for loan-related queries and workflows. |
 ---
 
 ## Prompts Used
@@ -117,27 +115,4 @@ Examples: `9876543210` → `9876XXXX10`, `6543219870` → `6543XXXX70`
 - Verifies mobile masking in all GET/POST responses
 - Verifies exact error shape `{ error: { code, message, fields[] } }`
 
----
 
-## Commit History (20 Commits)
-
-1. `feat: Initial project setup – monorepo, gitignore, env.example`
-2. `feat: Database models – LoanScheme and Lead Mongoose schemas`
-3. `feat: Database seed script – 5 default loan plans`
-4. `feat: Zod validation schemas for all API endpoints`
-5. `feat: Core math utilities – pure gold, gold value, eligible loan`
-6. `feat: Error handling utilities – errorUtils with standard API error shape`
-7. `feat: Database connection utility`
-8. `feat: Express app factory with middleware and routes`
-9. `feat: GET /api/v1/loan-schemes endpoint`
-10. `feat: POST /api/v1/quotes endpoint`
-11. `feat: POST and GET /api/v1/leads endpoints with duplicate detection`
-12. `feat: AI agent route with Gemini function calling`
-13. `feat: Unit tests for math utilities`
-14. `feat: API integration tests – 400 and 409 scenarios`
-15. `feat: React frontend scaffold – Vite, Tailwind, types, API client`
-16. `feat: Step 1 DetailsForm with live inline validation`
-17. `feat: Step 2 LiveQuote with 300ms debounce and plan cards`
-18. `feat: Step 3 ConfirmStep and SuccessScreen`
-19. `feat: AdminView with table, filters, and pagination`
-20. `feat: AiChat interface and final project documentation`
