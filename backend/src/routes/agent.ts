@@ -179,9 +179,13 @@ router.post(
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
+    if (!apiKey || apiKey === "your_gemini_api_key_here" || !apiKey.trim()) {
       res.status(503).json(
-        buildError(503, "AI service is not configured. Please set GEMINI_API_KEY.", [])
+        buildError(
+          503,
+          "Gemini API key is not configured. Please add a valid GEMINI_API_KEY to your .env file.",
+          []
+        )
       );
       return;
     }
@@ -189,7 +193,7 @@ router.post(
     try {
       const genAI = getGeminiClient();
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: SYSTEM_PROMPT,
         tools: loanAgentTools,
       });
@@ -263,7 +267,16 @@ router.post(
         );
         return;
       }
-      throw err;
+      const errMsg = err instanceof Error ? err.message : String(err);
+      if (errMsg.includes("API key not valid") || errMsg.includes("API_KEY_INVALID")) {
+        res.status(401).json(
+          buildError(401, "Invalid GEMINI_API_KEY. Please verify your API key from Google AI Studio.", [])
+        );
+        return;
+      }
+      res.status(502).json(
+        buildError(502, `AI service error: ${errMsg}`, [])
+      );
     }
   })
 );

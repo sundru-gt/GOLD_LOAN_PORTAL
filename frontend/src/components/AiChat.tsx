@@ -7,6 +7,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import { sendChatMessage } from "../api/client";
 import { LoadingSpinner } from "./ui/index";
 import { SendIcon, BotIcon, SparklesIcon } from "./ui/Icons";
@@ -64,10 +65,18 @@ export function AiChat() {
       setMessages((prev) => [...prev, aiMessage]);
       setApiHistory(response.history);
     } catch (err: unknown) {
-      const errorText =
-        err instanceof Error && "response" in err
-          ? "Service unavailable. Please check that GEMINI_API_KEY is configured."
-          : "Something went wrong. Please try again.";
+      let errorText = "Something went wrong. Please try again.";
+
+      if (axios.isAxiosError(err)) {
+        errorText =
+          err.response?.data?.error?.message ||
+          err.response?.data?.message ||
+          (err.response?.status === 503
+            ? "Gemini API key is not configured. Please add a valid GEMINI_API_KEY to your .env file."
+            : err.message);
+      } else if (err instanceof Error) {
+        errorText = err.message;
+      }
 
       setMessages((prev) => [
         ...prev,
