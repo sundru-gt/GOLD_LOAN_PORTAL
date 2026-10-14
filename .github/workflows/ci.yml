@@ -20,10 +20,9 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: backend/package-lock.json
+          cache-dependency-path: package-lock.json
 
-      - name: Install backend dependencies
-        working-directory: ./backend
+      - name: Install dependencies
         run: npm ci
 
       - name: Run backend tests
@@ -40,6 +39,7 @@ jobs:
         with:
           name: backend-coverage
           path: backend/coverage/
+          if-no-files-found: ignore
 
   typecheck-frontend:
     name: Frontend Type Check
@@ -53,9 +53,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
 
-      - name: Install frontend dependencies
-        working-directory: ./frontend
+      - name: Install dependencies
         run: npm ci
 
       - name: TypeScript check
@@ -75,11 +76,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
 
-      - name: Install all dependencies
-        run: |
-          cd backend && npm ci
-          cd ../frontend && npm ci
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build backend
         working-directory: ./backend
@@ -90,3 +91,4 @@ jobs:
         env:
           VITE_API_BASE_URL: http://localhost:4000
         run: npm run build
+
