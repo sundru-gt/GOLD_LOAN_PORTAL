@@ -210,17 +210,7 @@ gold-loan-portal/
 4. **Real Gold Rate API**: Integrate live gold price feed (e.g., MCX or Gold API)
 5. **WebSockets**: Real-time status updates when admin changes lead status
 6. **Rate Limiting**: Per-IP limits on /quotes and /leads endpoints
-7. **File Upload**: Gold photo upload for remote pre-assessment
-8. **SMS OTP**: Verify mobile number before submission
-9. **Audit Log**: Track all status changes with timestamps
-10. **Playwright E2E Tests**: Full browser automation tests for the UI flow
-
----
-
-## 🏗️ Git Commit Strategy
-
-This repo was built with exactly 20 atomic commits representing functional milestones. See `AI_LOG.md` for details.
-
+7. **SMS OTP**: Verify mobile number before submission
 ---
 
 *Built with ❤️ using Node.js, React, MongoDB, and Gemini AI*
